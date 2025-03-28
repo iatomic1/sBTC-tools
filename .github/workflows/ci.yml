@@ -1,0 +1,22 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install dependencies
+        run: bun install
+      - name: Build
+        run: bun run build
+      - name: Run unit tests
+        run: bun run test
+      - name: Install Playwright browsers
+        run: bunx playwright install --with-deps
+      - name: Run E2E tests
+        run: bunx playwright test --config=apps/web/playwright.config.ts
+      - name: Lint
+        run: bun run lint
