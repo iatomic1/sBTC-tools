@@ -69,7 +69,7 @@ export const getAddressBalance = async (
   }
 };
 
-export const send = async (
+export const transfer = async (
   amount: string,
   receiverAddr: string,
   fee: string,
@@ -110,7 +110,10 @@ export const send = async (
 
   const decimal = 8;
   const uintAmt = Number.parseFloat(amount) * 10 ** decimal;
-  const contract = SBTC_CONTRACT_ID.split('.');
+  const contract =
+    config.NETWORK === 'mainnet'
+      ? SBTC_CONTRACT_ID.split('.')
+      : SBTC_TESTNET_CONTRACT_ID.split('.');
   const txOptions: SignedContractCallOptions = {
     contractAddress: contract[0],
     contractName: contract[1],
@@ -118,7 +121,7 @@ export const send = async (
     postConditions: [
       Pc.principal(config.WALLET_ADDRESS as string)
         .willSendEq(uintAmt)
-        .ft(`${SBTC_CONTRACT_ID}`, 'sbtc-token'),
+        .ft(`${contract[0]}.${contract[1]}`, 'sbtc-token'),
     ],
     functionArgs: [
       uintCV(uintAmt.toString()),
@@ -132,7 +135,6 @@ export const send = async (
     validateWithAbi: true,
     network: config.NETWORK,
   };
-  console.log(txOptions);
 
   return new Promise((resolve, reject) => {
     setTimeout(async () => {
@@ -140,7 +142,7 @@ export const send = async (
         const tx = await makeContractCall(txOptions);
         const res = await broadcastTransaction({
           transaction: tx,
-          network: 'mainnet',
+          network: config.NETWORK,
         });
         resolve(res);
       } catch (err) {
