@@ -19,9 +19,12 @@
   },
   "dependencies": {
     "@clack/prompts": "^0.10.0",
+    "@stacks/blockchain-api-client": "^8.7.0",
     "@stacks/transactions": "^7.0.5",
     "@stacks/wallet-sdk": "^7.0.5",
+    "axios": "^1.8.4",
     "dotenv": "^16.4.7",
+    "envfile": "^7.1.0",
     "picocolors": "^1.1.1",
     "sbtc": "^0.3.2"
   }
