@@ -1,28 +1,16 @@
 {
-  "name": "cli",
-  "version": "0.0.0",
-  "private": true,
+  "name": "@repo/cli",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
   "scripts": {
-    "dev": "bun run --hot src/index.ts",
-    "build": "echo 'Add build script here'",
-    "test": "echo 'Add test script here'",
-    "lint": "echo 'Add lint script here'"
+    "dev": "bun run --hot src/index.ts"
   },
   "peerDependencies": {
-    "@repo/tsconfig": "*",
-    "@repo/utils": "*"
-  },
-  "devDependencies": {
     "typescript": "^5.0.0",
-    "@types/bun": "latest",
+    "@biomejs/biome": "1.8.3",
     "@repo/tsconfig": "workspace:*"
-  },
-  "dependencies": {
-    "@clack/prompts": "^0.10.0",
-    "@stacks/transactions": "^7.0.5",
-    "@stacks/wallet-sdk": "^7.0.5",
-    "dotenv": "^16.4.7",
-    "picocolors": "^1.1.1",
-    "sbtc": "^0.3.2"
   }
 }
