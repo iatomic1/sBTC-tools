@@ -1,6 +1,4 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
-
+import getPriceHistory from '@/queries/price-history';
 import { Button } from '@ui/components/ui/button';
 import {
   Card,
@@ -15,6 +13,9 @@ import {
   TabsList,
   TabsTrigger,
 } from '@ui/components/ui/tabs';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { Suspense } from 'react';
 import { DailyTransfers } from './_components/daily-transfers';
 import { DeFiProjects } from './_components/defi-projects';
 import { OverviewMetrics } from './_components/overview-metrics';
@@ -23,13 +24,15 @@ import { RecentActivity } from './_components/recent-activity';
 import { TopHolders } from './_components/top-holders';
 import { TransferVolume } from './_components/transfer-volume';
 import { WalletAgeDistribution } from './_components/wallet-age-distribution';
+import { PriceHistorySkeleton } from './components/skeletons/price-history-skeleton';
 export const metadata: Metadata = {
   title: 'sBTC Analytics Dashboard',
   description:
     'Comprehensive analytics for sBTC transactions, holders, and DeFi integrations',
 };
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const priceHistory = await getPriceHistory();
   return (
     <div className="flex min-h-screen flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
@@ -52,12 +55,11 @@ export default function DashboardPage() {
           <TabsContent value="overview" className="space-y-4">
             <OverviewMetrics />
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-              <Card className="col-span-4">
-                <CardHeader>
-                  <CardTitle>sBTC Price</CardTitle>
-                </CardHeader>
-                <CardContent className="pl-2">
-                  <PriceHistory />
+              <Card className="col-span-4 !p-0 border-none">
+                <CardContent className="!p-0">
+                  <Suspense fallback={<PriceHistorySkeleton />}>
+                    <PriceHistory priceData={priceHistory?.data} />
+                  </Suspense>
                 </CardContent>
               </Card>
               <Card className="col-span-3">
