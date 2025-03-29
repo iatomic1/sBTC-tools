@@ -1,11 +1,10 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import type React from 'react';
-import { Providers } from './providers';
 
 import '@repo/ui/globals.css';
-import { Layout } from './_components/layout';
-import { ThemeProvider } from './_components/theme-provider';
+import { Layout } from './_components/common/layout';
+import { ThemeProvider } from './_components/common/theme-provider';
 
 const inter = Inter({
   subsets: ['latin'],
