@@ -1,10 +1,9 @@
 'use client';
 
 import * as SelectPrimitive from '@radix-ui/react-select';
+import { cn } from '@repo/ui/lib/utils';
 import { Check, ChevronDown, ChevronUp } from 'lucide-react';
 import * as React from 'react';
-
-import { cn } from '@ui/lib/utils';
 
 const Select = SelectPrimitive.Root;
 
@@ -12,15 +11,9 @@ const SelectGroup = SelectPrimitive.Group;
 
 const SelectValue = SelectPrimitive.Value;
 
-interface SelectTriggerProps
-  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {
-  children?: React.ReactNode;
-  className?: string;
-}
-
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
-  SelectTriggerProps
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
@@ -73,16 +66,9 @@ const SelectScrollDownButton = React.forwardRef<
 SelectScrollDownButton.displayName =
   SelectPrimitive.ScrollDownButton.displayName;
 
-interface SelectContentProps
-  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> {
-  children?: React.ReactNode;
-  position?: 'popper' | 'item-aligned';
-  className?: string;
-}
-
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
-  SelectContentProps
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
 >(({ className, children, position = 'popper', ...props }, ref) => (
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
@@ -124,15 +110,9 @@ const SelectLabel = React.forwardRef<
 ));
 SelectLabel.displayName = SelectPrimitive.Label.displayName;
 
-interface SelectItemProps
-  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> {
-  children?: React.ReactNode;
-  value: string;
-  className?: string;
-}
 const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
-  SelectItemProps
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Item
     ref={ref}

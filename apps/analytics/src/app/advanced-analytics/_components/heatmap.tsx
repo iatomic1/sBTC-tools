@@ -7,14 +7,14 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@ui/components/ui/card';
+} from '@repo/ui/components/ui/card';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@ui/components/ui/select';
+} from '@repo/ui/components/ui/select';
 import { useEffect, useState } from 'react';
 
 interface HeatmapData {

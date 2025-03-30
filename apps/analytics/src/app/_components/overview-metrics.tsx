@@ -8,7 +8,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from '@ui/components/ui/card';
+} from '@repo/ui/components/ui/card';
 
 export function OverviewMetrics({
   sbtcData,

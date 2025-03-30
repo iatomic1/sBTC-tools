@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader } from '@ui/components/ui/card';
-import { Skeleton } from '@ui/components/ui/skeleton';
+import { Card, CardContent, CardHeader } from '@repo/ui/components/ui/card';
+import { Skeleton } from '@repo/ui/components/ui/skeleton';
 
 export function PriceHistorySkeleton() {
   return (

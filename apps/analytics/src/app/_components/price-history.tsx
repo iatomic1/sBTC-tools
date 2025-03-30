@@ -7,14 +7,14 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@ui/components/ui/card';
+} from '@repo/ui/components/ui/card';
 
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '@ui/components/ui/tabs';
+} from '@repo/ui/components/ui/tabs';
 import { format } from 'date-fns';
 import { useState } from 'react';
 import {

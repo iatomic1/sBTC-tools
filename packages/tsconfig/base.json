@@ -4,7 +4,6 @@
   "compilerOptions": {
     "declaration": true,
     "declarationMap": true,
-    "allowJs": true,
     "esModuleInterop": true,
     "incremental": false,
     "isolatedModules": true,

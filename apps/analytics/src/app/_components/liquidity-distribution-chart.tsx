@@ -5,7 +5,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@ui/components/ui/card';
+} from '@repo/ui/components/ui/card';
 import React from 'react';
 import {
   Bar,

@@ -6,7 +6,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@ui/components/ui/card';
+} from '@repo/ui/components/ui/card';
 import {
   Table,
   TableBody,
@@ -14,7 +14,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@ui/components/ui/table';
+} from '@repo/ui/components/ui/table';
 import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts';
 import LiquidityDistributionChart from './liquidity-distribution-chart';
 

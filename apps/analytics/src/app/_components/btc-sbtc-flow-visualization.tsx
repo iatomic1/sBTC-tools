@@ -1,12 +1,12 @@
 'use client';
-import { Badge } from '@ui/components/ui/badge';
+import { Badge } from '@repo/ui/components/ui/badge';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@ui/components/ui/card';
+} from '@repo/ui/components/ui/card';
 import { ArrowRight, Bitcoin } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
