@@ -1,3 +1,4 @@
+import { KRAXEL_API_URL, SBTC_CONTRACT_ID } from '@/lib/constants';
 import type { PriceData } from '@/types/price-history';
 
 export default async function getPriceHistory(): Promise<{
@@ -6,7 +7,7 @@ export default async function getPriceHistory(): Promise<{
 } | null> {
   try {
     const response = await fetch(
-      'https://kraxel.io/api/v3/candle?contract=SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token&timeframe=15m&limit=2000',
+      `${KRAXEL_API_URL}candle?contract=${SBTC_CONTRACT_ID}&timeframe=15m&limit=1000`,
     );
 
     if (!response) {

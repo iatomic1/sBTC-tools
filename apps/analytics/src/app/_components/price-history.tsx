@@ -124,7 +124,7 @@ export function PriceHistory({ priceData = [] }: { priceData?: PriceData[] }) {
   }
 
   return (
-    <Card className="w-full">
+    <Card className="!w-full">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div>
           <CardTitle>sBTC Price History</CardTitle>

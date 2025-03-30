@@ -1,5 +1,6 @@
 'use client';
-
+import type { TopHoldersItem } from '@/types/top-holders';
+import { calculateTokenSupplyPercentage } from '@/utils';
 import {
   Table,
   TableBody,
@@ -9,46 +10,23 @@ import {
   TableRow,
 } from '@ui/components/ui/table';
 
-export function TopHolders() {
-  const holders = [
-    {
-      address: 'SP1QK1A3XYZ...',
-      balance: '24.5 sBTC',
-      percentage: '9.97%',
-      lastActivity: '2 hours ago',
-    },
-    {
-      address: 'SP2B3XYZ123...',
-      balance: '18.2 sBTC',
-      percentage: '7.40%',
-      lastActivity: '5 hours ago',
-    },
-    {
-      address: 'SP3C4Z9ABC...',
-      balance: '15.7 sBTC',
-      percentage: '6.39%',
-      lastActivity: '1 day ago',
-    },
-    {
-      address: 'SP5D6E7FGH...',
-      balance: '12.3 sBTC',
-      percentage: '5.00%',
-      lastActivity: '3 days ago',
-    },
-    {
-      address: 'SP7H8I9JKL...',
-      balance: '10.8 sBTC',
-      percentage: '4.39%',
-      lastActivity: '6 hours ago',
-    },
-    {
-      address: 'SP8F9G0HIJ...',
-      balance: '9.5 sBTC',
-      percentage: '3.86%',
-      lastActivity: '12 hours ago',
-    },
-  ];
+function truncateAddress(
+  address: string,
+  startChars = 5,
+  endChars = 3,
+): string {
+  if (address.length <= startChars + endChars) return address;
+  return `${address.slice(0, startChars)}...${address.slice(-endChars)}`;
+}
 
+function formatNumberCompact(value: number): string {
+  return new Intl.NumberFormat('en-US', {
+    notation: 'compact',
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
+export function TopHolders({ topHolders }: { topHolders: TopHoldersItem[] }) {
   return (
     <Table>
       <TableHeader>
@@ -56,18 +34,29 @@ export function TopHolders() {
           <TableHead>Address</TableHead>
           <TableHead>Balance</TableHead>
           <TableHead>% of Supply</TableHead>
-          <TableHead>Last Activity</TableHead>
+          {/* <TableHead>Last Activity</TableHead> */}
         </TableRow>
       </TableHeader>
       <TableBody>
-        {holders.map((holder) => (
-          <TableRow key={holder.address}>
-            <TableCell className="font-medium">{holder.address}</TableCell>
-            <TableCell>{holder.balance}</TableCell>
-            <TableCell>{holder.percentage}</TableCell>
-            <TableCell>{holder.lastActivity}</TableCell>
-          </TableRow>
-        ))}
+        {topHolders.slice(0, 7).map((holder) => {
+          // Convert balance to standard units (assuming 7 decimal places based on your code)
+          const balanceInStandardUnits = Number(holder.balance) / 10_000_000;
+
+          return (
+            <TableRow key={holder.wallet.address}>
+              <TableCell className="font-medium">
+                {holder.wallet.bns ?? truncateAddress(holder.wallet.address)}
+              </TableCell>
+              <TableCell>
+                {formatNumberCompact(balanceInStandardUnits)}
+              </TableCell>
+              <TableCell>
+                {calculateTokenSupplyPercentage(holder.balance, 3030, 7)}%
+              </TableCell>
+              {/* <TableCell>{holder.lastActivity}</TableCell> */}
+            </TableRow>
+          );
+        })}
       </TableBody>
     </Table>
   );

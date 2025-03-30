@@ -1,4 +1,9 @@
 import getPriceHistory from '@/queries/price-history';
+import getSbtcData from '@/queries/sbtc';
+import getTopHolders from '@/queries/top-holders';
+import { fetchAndAnalyzeTransactions } from '@/queries/transactions';
+import type { SbtcDataResponse } from '@/types/sbtc';
+import type { TopHoldersItem } from '@/types/top-holders';
 import { Button } from '@ui/components/ui/button';
 import {
   Card,
@@ -16,6 +21,7 @@ import {
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import { BtcSbtcFlowVisualization } from './_components/btc-sbtc-flow-visualization';
 import { DailyTransfers } from './_components/daily-transfers';
 import { DeFiProjects } from './_components/defi-projects';
 import { OverviewMetrics } from './_components/overview-metrics';
@@ -25,6 +31,7 @@ import { TopHolders } from './_components/top-holders';
 import { TransferVolume } from './_components/transfer-volume';
 import { WalletAgeDistribution } from './_components/wallet-age-distribution';
 import { PriceHistorySkeleton } from './components/skeletons/price-history-skeleton';
+import { TableSkeleton } from './components/skeletons/table-skeleton';
 export const metadata: Metadata = {
   title: 'sBTC Analytics Dashboard',
   description:
@@ -32,7 +39,11 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
+  const sbtcData = await getSbtcData();
   const priceHistory = await getPriceHistory();
+  const topHolders = await getTopHolders();
+  const transactions = await fetchAndAnalyzeTransactions();
+
   return (
     <div className="flex min-h-screen flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
@@ -53,16 +64,41 @@ export default async function DashboardPage() {
             <TabsTrigger value="defi">DeFi</TabsTrigger>
           </TabsList>
           <TabsContent value="overview" className="space-y-4">
-            <OverviewMetrics />
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-              <Card className="col-span-4 !p-0 border-none">
-                <CardContent className="!p-0">
-                  <Suspense fallback={<PriceHistorySkeleton />}>
-                    <PriceHistory priceData={priceHistory?.data} />
+            <OverviewMetrics
+              transactions={transactions}
+              sbtcData={sbtcData?.data as SbtcDataResponse['data']}
+            />
+
+            {/* First row: BTC-sBTC Flow and Price History side by side */}
+            <div className="grid gap-4 md:grid-cols-2">
+              <Card className="!p-0 border-none shadow-none">
+                <Suspense fallback={<PriceHistorySkeleton />}>
+                  <BtcSbtcFlowVisualization />
+                </Suspense>
+              </Card>
+              <Card className="!p-0 border-none shadow-none">
+                <PriceHistory priceData={priceHistory?.data} />
+              </Card>
+            </div>
+
+            {/* Second row: Top Holders and Recent Activity side by side */}
+            <div className="grid gap-4 md:grid-cols-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Top Holders</CardTitle>
+                  <CardDescription>
+                    Addresses with the largest sBTC balances
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Suspense fallback={<p>Loading ...</p>}>
+                    <TopHolders
+                      topHolders={topHolders?.data as TopHoldersItem[]}
+                    />
                   </Suspense>
                 </CardContent>
               </Card>
-              <Card className="col-span-3">
+              <Card>
                 <CardHeader>
                   <CardTitle>Recent Activity</CardTitle>
                   <CardDescription>Latest sBTC transactions</CardDescription>
@@ -72,8 +108,10 @@ export default async function DashboardPage() {
                 </CardContent>
               </Card>
             </div>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-              <Card className="col-span-4">
+
+            {/* Third row: Daily Transfers full width */}
+            <div className="grid gap-4">
+              <Card>
                 <CardHeader>
                   <CardTitle>Daily sBTC Transfers</CardTitle>
                 </CardHeader>
@@ -81,19 +119,9 @@ export default async function DashboardPage() {
                   <DailyTransfers />
                 </CardContent>
               </Card>
-              <Card className="col-span-3">
-                <CardHeader>
-                  <CardTitle>Top Holders</CardTitle>
-                  <CardDescription>
-                    Addresses with the largest sBTC balances
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <TopHolders />
-                </CardContent>
-              </Card>
             </div>
           </TabsContent>
+
           <TabsContent value="transfers" className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
               <Card className="col-span-4">
@@ -149,6 +177,7 @@ export default async function DashboardPage() {
               </Card>
             </div>
           </TabsContent>
+
           <TabsContent value="holders" className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
               <Card className="col-span-4">
@@ -159,7 +188,9 @@ export default async function DashboardPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <TopHolders />
+                  <TopHolders
+                    topHolders={topHolders?.data as TopHoldersItem[]}
+                  />
                 </CardContent>
               </Card>
               <Card className="col-span-3">
@@ -175,6 +206,7 @@ export default async function DashboardPage() {
               </Card>
             </div>
           </TabsContent>
+
           <TabsContent value="defi" className="space-y-4">
             <DeFiProjects />
           </TabsContent>
