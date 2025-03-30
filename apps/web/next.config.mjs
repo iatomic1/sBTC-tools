@@ -9,6 +9,14 @@ const withBundleAnalyzer = bundleAnalyzer({
 const nextConfig = {
   transpilePackages: ['@repo/ui'],
   reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'hebbkx1anhila5yf.public.blob.vercel-storage.com',
+      },
+    ],
+  },
   experimental: {
     turbo: {
       rules: {
