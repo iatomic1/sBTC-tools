@@ -8,13 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@ui/components/ui/card';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@ui/components/ui/select';
+
 import {
   Tabs,
   TabsContent,
@@ -38,7 +32,7 @@ import {
 } from 'recharts';
 
 export function PriceHistory({ priceData = [] }: { priceData?: PriceData[] }) {
-  const [timeRange, setTimeRange] = useState('30d');
+  // const [timeRange, setTimeRange] = useState("30d");
   const [chartType, setChartType] = useState('price');
 
   // Format data for better display
@@ -47,19 +41,19 @@ export function PriceHistory({ priceData = [] }: { priceData?: PriceData[] }) {
     const date = new Date(
       typeof item.timestamp === 'string'
         ? Number.parseInt(item.timestamp)
-        : item.timestamp,
+        : item.timestamp ?? 0,
     );
 
     // Convert string values to numbers if needed
     const price =
       typeof item.close === 'string'
         ? Number.parseFloat(item.close)
-        : item.close;
+        : item.close ?? 0;
 
     const volume =
       typeof item.volume === 'string'
         ? Number.parseFloat(item.volume)
-        : item.volume;
+        : item.volume ?? 0;
 
     const tvl = item.tvl
       ? typeof item.tvl === 'string'
@@ -75,13 +69,15 @@ export function PriceHistory({ priceData = [] }: { priceData?: PriceData[] }) {
       open:
         typeof item.open === 'string'
           ? Number.parseFloat(item.open)
-          : item.open,
+          : item.open ?? 0,
       high:
         typeof item.high === 'string'
           ? Number.parseFloat(item.high)
-          : item.high,
+          : item.high ?? 0,
       low:
-        typeof item.low === 'string' ? Number.parseFloat(item.low) : item.low,
+        typeof item.low === 'string'
+          ? Number.parseFloat(item.low)
+          : item.low ?? 0,
       close: price,
       volume: volume,
       tvl: tvl,
@@ -100,10 +96,10 @@ export function PriceHistory({ priceData = [] }: { priceData?: PriceData[] }) {
   const calculateDayChange = () => {
     if (sortedData.length < 2) return 0;
 
-    const latest = sortedData[sortedData.length - 1].price;
-    const previous = sortedData[sortedData.length - 2].price;
+    const latest = sortedData[sortedData.length - 1]?.price ?? 0;
+    const previous = sortedData[sortedData.length - 2]?.price ?? 0;
 
-    return ((latest - previous) / previous) * 100;
+    return previous === 0 ? 0 : ((latest - previous) / previous) * 100;
   };
 
   const dayChangePercentage = calculateDayChange();
@@ -130,19 +126,19 @@ export function PriceHistory({ priceData = [] }: { priceData?: PriceData[] }) {
           <CardTitle>sBTC Price History</CardTitle>
           <CardDescription>Historical price and volume data</CardDescription>
         </div>
-        <div className="flex space-x-2">
-          <Select defaultValue={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger className="w-[100px]">
-              <SelectValue placeholder="Time Range" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="7d">7 Days</SelectItem>
-              <SelectItem value="30d">30 Days</SelectItem>
-              <SelectItem value="90d">90 Days</SelectItem>
-              <SelectItem value="1y">1 Year</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        {/* <div className="flex space-x-2"> */}
+        {/*   <Select defaultValue={timeRange} onValueChange={setTimeRange}> */}
+        {/*     <SelectTrigger className="w-[100px]"> */}
+        {/*       <SelectValue placeholder="Time Range" /> */}
+        {/*     </SelectTrigger> */}
+        {/*     <SelectContent> */}
+        {/*       <SelectItem value="7d">7 Days</SelectItem> */}
+        {/*       <SelectItem value="30d">30 Days</SelectItem> */}
+        {/*       <SelectItem value="90d">90 Days</SelectItem> */}
+        {/*       <SelectItem value="1y">1 Year</SelectItem> */}
+        {/*     </SelectContent> */}
+        {/*   </Select> */}
+        {/* </div> */}
       </CardHeader>
       <CardContent>
         <Tabs
@@ -308,7 +304,7 @@ export function PriceHistory({ priceData = [] }: { priceData?: PriceData[] }) {
               $
               {sortedData.length > 0
                 ? Number(
-                    sortedData[sortedData.length - 1].price,
+                    sortedData[sortedData.length - 1]?.price ?? 0,
                   ).toLocaleString()
                 : '0'}
             </p>
@@ -328,7 +324,9 @@ export function PriceHistory({ priceData = [] }: { priceData?: PriceData[] }) {
             <p className="text-sm text-muted-foreground">24h Volume</p>
             <p className="text-xl font-bold">
               {sortedData.length > 0
-                ? Number(sortedData[sortedData.length - 1].volume).toFixed(2)
+                ? Number(
+                    sortedData[sortedData.length - 1]?.volume ?? 0,
+                  ).toFixed(2)
                 : '0'}{' '}
               BTC
             </p>

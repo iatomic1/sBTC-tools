@@ -51,7 +51,7 @@ export function TopHolders({ topHolders }: { topHolders: TopHoldersItem[] }) {
                 {formatNumberCompact(balanceInStandardUnits)}
               </TableCell>
               <TableCell>
-                {calculateTokenSupplyPercentage(holder.balance, 3030, 7)}%
+                {calculateTokenSupplyPercentage(holder.balance, 3030)}%
               </TableCell>
               {/* <TableCell>{holder.lastActivity}</TableCell> */}
             </TableRow>
