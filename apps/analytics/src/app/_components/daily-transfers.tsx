@@ -1,30 +1,43 @@
 'use client';
+import {
+  type DailyTransfer,
+  fetch15DayTransfers,
+} from '@/queries/transactions';
+import { useEffect, useState } from 'react';
 import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 
-const data = [
-  { date: '2024-03-01', transfers: 245 },
-  { date: '2024-03-02', transfers: 267 },
-  { date: '2024-03-03', transfers: 253 },
-  { date: '2024-03-04', transfers: 290 },
-  { date: '2024-03-05', transfers: 310 },
-  { date: '2024-03-06', transfers: 285 },
-  { date: '2024-03-07', transfers: 302 },
-  { date: '2024-03-08', transfers: 315 },
-  { date: '2024-03-09', transfers: 298 },
-  { date: '2024-03-10', transfers: 320 },
-  { date: '2024-03-11', transfers: 342 },
-  { date: '2024-03-12', transfers: 335 },
-  { date: '2024-03-13', transfers: 318 },
-  { date: '2024-03-14', transfers: 329 },
-  { date: '2024-03-15', transfers: 324 },
-];
-
 export function DailyTransfers() {
+  const [chartData, setChartData] = useState<DailyTransfer[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const data = await fetch15DayTransfers();
+        setChartData(data);
+      } catch (error) {
+        console.error('Failed to load chart data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="h-[300px] flex items-center justify-center">
+        Loading chart...
+      </div>
+    );
+  }
+
   return (
     <div className="h-[300px]">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
-          data={data}
+          data={chartData}
           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
         >
           <defs>
