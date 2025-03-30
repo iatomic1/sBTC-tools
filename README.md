@@ -12,33 +12,33 @@ A comprehensive suite of developer tools for working with sBTC on the Stacks blo
 
 ## 📁 Project Structure
 
-\`\`\`
+```
 sbtc-tools/
 ├── apps/
-│ ├── web/ # Next.js landing page
-│ ├── cli/ # Command-line interface for sBTC operations
-│ └── analytics/ # sBTC analytics dashboard
-├── packages/ # Shared packages and utilities
-│ ├── tsconfig/
-│ ├── utils/
-│ └── ui/ # Shared Shadcn UI components
+│   ├── web/      # Next.js landing page
+│   ├── cli/      # Command-line interface for sBTC operations
+│   └── analytics/  # sBTC analytics dashboard
+├── packages/     # Shared packages and utilities
+│   ├── tsconfig/
+│   ├── utils/
+│   └── ui/       # Shared Shadcn UI components
 └── README.md
-\`\`\`
+```
 
 ## 🔧 Installation
 
 First, clone the repository:
 
-\`\`\`bash
-git clone <https://github.com/iatomic1/sBTC-tools>
+```bash
+git clone https://github.com/iatomic1/sBTC-tools
 cd sBTC-tools
-\`\`\`
+```
 
 Then install dependencies:
 
-\`\`\`bash
+```bash
 bun install
-\`\`\`
+```
 
 ## 🏃‍♂️ Running the Applications
 
@@ -46,36 +46,32 @@ bun install
 
 To run the CLI tool:
 
-\`\`\`bash
+```bash
 cd apps/cli
 bun www/bin.ts
-\`\`\`
+```
 
 Example commands:
 
-\`\`\`bash
-
+```bash
 # Transfer STX
-
 bun www/bin.ts transfer --amount 100 --to SP2WNEL...
 
 # Check balance
-
 bun www/bin.ts balance --address SP2WNEL...
 
 # Get analytics
-
 bun www/bin.ts analytics --metric supply
-\`\`\`
+```
 
 ### Analytics Dashboard
 
 To run the analytics dashboard:
 
-\`\`\`bash
+```bash
 cd apps/analytics
 bun dev
-\`\`\`
+```
 
 Then open [http://localhost:4002](http://localhost:4002) in your browser.
 
@@ -83,10 +79,10 @@ Then open [http://localhost:4002](http://localhost:4002) in your browser.
 
 To run the landing page:
 
-\`\`\`bash
+```bash
 cd apps/web
 bun dev
-\`\`\`
+```
 
 Then open [http://localhost:4000](http://localhost:4000) in your browser.
 
