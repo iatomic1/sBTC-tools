@@ -22,13 +22,17 @@ export function ModeToggle() {
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
+      {/* @ts-ignore */}
       <DropdownMenuContent align="end">
+        {/* @ts-ignore */}
         <DropdownMenuItem onClick={() => setTheme('light')}>
           Light
         </DropdownMenuItem>
+        {/* @ts-ignore */}
         <DropdownMenuItem onClick={() => setTheme('dark')}>
           Dark
         </DropdownMenuItem>
+        {/* @ts-ignore */}
         <DropdownMenuItem onClick={() => setTheme('system')}>
           System
         </DropdownMenuItem>

@@ -4,6 +4,7 @@
   "description": "UI",
   "private": true,
   "scripts": {
+    "build": "tsup src/index.ts --dts --format cjs,esm",
     "ui:add": "bunx shadcn@latest add",
     "lint": "biome check .",
     "lint:fix": "biome check . --apply",
@@ -18,6 +19,7 @@
     "autoprefixer": "10.4.21",
     "postcss": "8.4.49",
     "tailwindcss": "3.4.17",
+    "tsup": "^8.0.2",
     "typescript": "5.5.4"
   },
   "dependencies": {

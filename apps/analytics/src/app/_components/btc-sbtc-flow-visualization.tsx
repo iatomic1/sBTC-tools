@@ -253,7 +253,10 @@ export function BtcSbtcFlowVisualization() {
   }, []); // Empty dependency array to run once on mount
 
   return (
-    <Card className="w-full overflow-hidden">
+    <Card className="w-full relative">
+      <Badge className="absolute -top-3 right-1 z-2">
+        Real data coming soon
+      </Badge>
       <CardHeader>
         <CardTitle>BTC → sBTC Real-time Flow</CardTitle>
         <CardDescription>

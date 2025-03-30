@@ -9,10 +9,11 @@ const withBundleAnalyzer = bundleAnalyzer({
 const nextConfig = {
   transpilePackages: ['@repo/ui'],
   typescript: {
-    ignoreBuildErrors: true,
+    // ignoreBuildErrors: true,
   },
   reactStrictMode: true,
   experimental: {
+    // esmExternals: "loose",
     turbo: {
       rules: {
         '*.svg': {
