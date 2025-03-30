@@ -9,20 +9,20 @@ import {
 import type { PoolItem } from '@/types/pools';
 import type { SbtcDataResponse } from '@/types/sbtc';
 import type { TopHoldersItem } from '@/types/top-holders';
-import { Button } from '@ui/components/ui/button';
+import { Button } from '@repo/ui/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@ui/components/ui/card';
+} from '@repo/ui/components/ui/card';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '@ui/components/ui/tabs';
+} from '@repo/ui/components/ui/tabs';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';

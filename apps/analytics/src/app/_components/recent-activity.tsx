@@ -2,8 +2,8 @@
 
 import { EXPLORER_URL } from '@/lib/constants';
 import { fetchAllRecentTransactions } from '@/queries/transactions';
-import { Badge } from '@ui/components/ui/badge';
-import { Button } from '@ui/components/ui/button';
+import { Badge } from '@repo/ui/components/ui/badge';
+import { Button } from '@repo/ui/components/ui/button';
 import { formatDistanceToNow } from 'date-fns';
 import { ArrowUpRight } from 'lucide-react';
 import { useEffect, useState } from 'react';

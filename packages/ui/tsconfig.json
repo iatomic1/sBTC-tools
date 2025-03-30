@@ -1,12 +1,11 @@
 {
   "extends": "@repo/tsconfig/react-library.json",
   "compilerOptions": {
-    "jsx": "preserve",
-    "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@ui/*": ["src/*"]
+      "@repo/ui/*": ["./src/*"]
+      // "@/*": ["./src/*"],
+      // "@ui/*": ["src/*"]
     }
   },
   "include": ["src"],

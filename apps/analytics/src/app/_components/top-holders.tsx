@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@ui/components/ui/table';
+} from '@repo/ui/components/ui/table';
 
 function truncateAddress(
   address: string,

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Next.js",
   "extends": "@repo/tsconfig/nextjs.json",
+  "display": "Next.js",
   "compilerOptions": {
     "types": ["vitest/globals"],
     "plugins": [
@@ -10,8 +10,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@ui/*": ["../../packages/ui/src/*"]
+      "@/*": ["./src/*"]
+      // "@ui/*": ["../../packages/ui/src/*"]
     }
   },
   "include": [

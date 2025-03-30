@@ -1,11 +1,11 @@
 'use client';
-import { Button } from '@ui/components/ui/button';
+import { Button } from '@repo/ui/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@ui/components/ui/dropdown-menu';
+} from '@repo/ui/components/ui/dropdown-menu';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import * as React from 'react';

@@ -14,9 +14,13 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { Button } from '@ui/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@ui/components/ui/sheet';
-import { cn } from '@ui/lib/utils';
+import { Button } from '@repo/ui/components/ui/button';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from '@repo/ui/components/ui/sheet';
+import { cn } from '@repo/ui/lib/utils';
 import { ModeToggle } from './theme-toggle';
 
 export function Layout({ children }: { children: React.ReactNode }) {
