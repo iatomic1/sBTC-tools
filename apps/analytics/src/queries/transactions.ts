@@ -335,14 +335,11 @@ export async function calculateTransferStats(): Promise<{
       }, 0);
     };
 
-    // Note: The remaining function code was truncated in your paste
-    // I'm adding a return statement to complete the function
-
     return {
       avgTransfer,
       largestTransfer: maxAmount.toFixed(2),
       largestTransferDate,
-      percentageChange: '0', // This would normally be calculated from the weeks comparison
+      percentageChange: '0',
     };
   } catch (error) {
     return {
@@ -351,5 +348,53 @@ export async function calculateTransferStats(): Promise<{
       largestTransferDate: 'Error occurred',
       percentageChange: '0',
     };
+  }
+}
+
+export interface HeatmapData {
+  day: string; // "Mon", "Tue", etc.
+  hour: string; // "0:00", "3:00", etc.
+  value: number; // transaction count
+}
+
+export async function fetchSBtcHeatmapData(): Promise<HeatmapData[]> {
+  try {
+    const transactions = await fetchAllRecentTransactions(30); // Get 30 days of data
+
+    // Filter only sBTC transfers
+    const sbtcTransfers = transactions.filter(
+      (tx) =>
+        tx.tx.tx_type === 'contract_call' &&
+        tx.tx.contract_call?.contract_id.includes('sbtc-token') &&
+        tx.tx.contract_call.function_name === 'transfer',
+    );
+
+    if (sbtcTransfers.length === 0) return [];
+
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const hours = Array.from({ length: 8 }, (_, i) => `${i * 3}:00`);
+    const heatmapData: HeatmapData[] = [];
+
+    // Replace forEach with for...of loop
+    for (const day of days) {
+      for (const hour of hours) {
+        heatmapData.push({ day, hour, value: 0 });
+      }
+    }
+
+    // Replace forEach with for...of loop
+    for (const tx of sbtcTransfers) {
+      const date = new Date(tx.tx.block_time * 1000);
+      const day = days[date.getUTCDay()];
+      const hour = `${Math.floor(date.getUTCHours() / 3) * 3}:00`;
+
+      const entry = heatmapData.find((d) => d.day === day && d.hour === hour);
+      if (entry) entry.value += 1;
+    }
+
+    return heatmapData;
+  } catch (error) {
+    console.error('Error fetching heatmap data:', error);
+    return [];
   }
 }
