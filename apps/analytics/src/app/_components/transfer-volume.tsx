@@ -1,31 +1,45 @@
 'use client';
 
+import {
+  type DailyTransfer,
+  fetch15DayTransfers,
+} from '@/queries/transactions';
+import { useEffect, useState } from 'react';
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 
-const data = [
-  { date: '2024-03-01', volume: 12.5 },
-  { date: '2024-03-02', volume: 18.2 },
-  { date: '2024-03-03', volume: 15.7 },
-  { date: '2024-03-04', volume: 22.3 },
-  { date: '2024-03-05', volume: 19.8 },
-  { date: '2024-03-06', volume: 24.5 },
-  { date: '2024-03-07', volume: 21.2 },
-  { date: '2024-03-08', volume: 17.9 },
-  { date: '2024-03-09', volume: 23.1 },
-  { date: '2024-03-10', volume: 25.6 },
-  { date: '2024-03-11', volume: 20.4 },
-  { date: '2024-03-12', volume: 18.9 },
-  { date: '2024-03-13', volume: 22.7 },
-  { date: '2024-03-14', volume: 26.3 },
-  { date: '2024-03-15', volume: 24.8 },
-];
-
 export function TransferVolume() {
+  const [chartData, setChartData] = useState<DailyTransfer[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const data = await fetch15DayTransfers();
+        console.log(data);
+        setChartData(data);
+      } catch (error) {
+        console.error('Failed to load chart data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="h-[300px] flex items-center justify-center">
+        Loading chart...
+      </div>
+    );
+  }
+
   return (
     <div className="h-[300px]">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
-          data={data}
+          data={chartData}
           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
         >
           <XAxis
@@ -46,7 +60,7 @@ export function TransferVolume() {
             tickFormatter={(value) => `${value}`}
           />
           <Bar
-            dataKey="volume"
+            dataKey="transfers"
             fill="hsl(var(--primary))"
             radius={[4, 4, 0, 0]}
           />

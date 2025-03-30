@@ -66,7 +66,7 @@ interface AnalysisResult {
   todayTransfers: number;
   yesterdayTransfers: number;
   percentageIncrease: string;
-  trend: 'increase' | 'decrease';
+  trend: "increase" | "decrease";
   todayTransactions: Transaction[];
   yesterdayTransactions: Transaction[];
   error?: string;
@@ -77,13 +77,13 @@ export async function fetchAndAnalyzeTransactions(): Promise<AnalysisResult> {
     const transactions = await fetchAllRecentTransactions();
 
     if (transactions.length === 0) {
-      return emptyResult('No transactions found');
+      return emptyResult("No transactions found");
     }
 
     // Get dates in UTC
     const now = new Date();
     const today = new Date(
-      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
     );
     const yesterday = new Date(today);
     yesterday.setUTCDate(yesterday.getUTCDate() - 1);
@@ -92,18 +92,18 @@ export async function fetchAndAnalyzeTransactions(): Promise<AnalysisResult> {
     const yesterdayTimestamp = Math.floor(yesterday.getTime() / 1000);
 
     const filterTransfer = (tx: Transaction) =>
-      tx.tx.tx_type === 'contract_call' &&
-      tx.tx.contract_call?.function_name === 'transfer';
+      tx.tx.tx_type === "contract_call" &&
+      tx.tx.contract_call?.function_name === "transfer";
 
     const todayTransactions = transactions.filter(
-      (tx) => tx.tx.block_time >= todayTimestamp && filterTransfer(tx),
+      (tx) => tx.tx.block_time >= todayTimestamp && filterTransfer(tx)
     );
 
     const yesterdayTransactions = transactions.filter(
       (tx) =>
         tx.tx.block_time >= yesterdayTimestamp &&
         tx.tx.block_time < todayTimestamp &&
-        filterTransfer(tx),
+        filterTransfer(tx)
     );
 
     const todayTransfersCount = todayTransactions.length;
@@ -123,14 +123,14 @@ export async function fetchAndAnalyzeTransactions(): Promise<AnalysisResult> {
       todayTransfers: todayTransfersCount,
       yesterdayTransfers: yesterdayTransfersCount,
       percentageIncrease: percentageIncrease.toFixed(2),
-      trend: percentageIncrease >= 0 ? 'increase' : 'decrease',
+      trend: percentageIncrease >= 0 ? "increase" : "decrease",
       todayTransactions,
       yesterdayTransactions,
     };
   } catch (error) {
-    console.error('Error fetching transaction data:', error);
+    console.error("Error fetching transaction data:", error);
     return emptyResult(
-      error instanceof Error ? error.message : 'Unknown error occurred',
+      error instanceof Error ? error.message : "Unknown error occurred"
     );
   }
 }
@@ -139,8 +139,8 @@ function emptyResult(error?: string): AnalysisResult {
   return {
     todayTransfers: 0,
     yesterdayTransfers: 0,
-    percentageIncrease: '0.00',
-    trend: 'decrease',
+    percentageIncrease: "0.00",
+    trend: "decrease",
     todayTransactions: [],
     yesterdayTransactions: [],
     ...(error ? { error } : {}),
@@ -148,10 +148,10 @@ function emptyResult(error?: string): AnalysisResult {
 }
 
 export async function fetchAllRecentTransactions(
-  days = 15,
+  days = 15
 ): Promise<Transaction[]> {
   const contractAddress =
-    'SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token';
+    "SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token";
   const nDaysAgo = Date.now() - days * 24 * 60 * 60 * 1000;
   const nDaysAgoTimestamp = Math.floor(nDaysAgo / 1000);
 
@@ -176,7 +176,7 @@ export async function fetchAllRecentTransactions(
       }
 
       const relevantTransactions = data.results.filter(
-        (tx) => tx.tx.block_time >= nDaysAgoTimestamp,
+        (tx) => tx.tx.block_time >= nDaysAgoTimestamp
       );
 
       allTransactions = [...allTransactions, ...relevantTransactions];
@@ -192,11 +192,11 @@ export async function fetchAllRecentTransactions(
 
       if (offset > 1000) {
         // Increased safety limit for 15 days
-        console.warn('Safety stop triggered at 1000 transactions');
+        console.warn("Safety stop triggered at 1000 transactions");
         hasMoreTransactions = false;
       }
     } catch (error) {
-      console.error('Error fetching transactions:', error);
+      console.error("Error fetching transactions:", error);
       hasMoreTransactions = false;
     }
   }
@@ -209,7 +209,7 @@ export async function fetch15DayTransfers(): Promise<DailyTransfer[]> {
     const transactions = await fetchAllRecentTransactions(15);
     return processDailyTransfers(transactions);
   } catch (error) {
-    console.error('Error fetching historical data:', error);
+    console.error("Error fetching historical data:", error);
     return [];
   }
 }
@@ -224,14 +224,14 @@ function processDailyTransfers(transactions: Transaction[]): DailyTransfer[] {
 
   // Initialize daily counts
   const dailyCounts = new Map<string, number>(
-    daysArray.map((date) => [date, 0]),
+    daysArray.map((date) => [date, 0])
   );
 
   // Count transfers - replacing forEach with for...of loop
   for (const tx of transactions) {
     if (
-      tx.tx.tx_type === 'contract_call' &&
-      tx.tx.contract_call?.function_name === 'transfer'
+      tx.tx.tx_type === "contract_call" &&
+      tx.tx.contract_call?.function_name === "transfer"
     ) {
       const date = dateToYMD(new Date(tx.tx.block_time * 1000));
       if (dailyCounts.has(date)) {
@@ -250,7 +250,7 @@ function processDailyTransfers(transactions: Transaction[]): DailyTransfer[] {
 }
 
 function dateToYMD(date: Date): string {
-  return date.toISOString().split('T')[0] as string;
+  return date.toISOString().split("T")[0] as string;
 }
 
 export async function calculateTransferStats(): Promise<{
@@ -260,62 +260,67 @@ export async function calculateTransferStats(): Promise<{
   percentageChange: string;
 }> {
   try {
-    const transactions = await fetchAllRecentTransactions(30);
+    const transactions = await fetchAllRecentTransactions(100);
 
+    // Filter only sBTC transfer transactions
     const transferTxs = transactions.filter(
       (tx) =>
-        tx.tx.tx_type === 'contract_call' &&
-        tx.tx.contract_call?.contract_id.includes('sbtc-token') &&
-        tx.tx.contract_call.function_name === 'transfer',
+        tx.tx.tx_type === "contract_call" &&
+        tx.tx.contract_call?.contract_id.includes("sbtc-token") &&
+        tx.tx.contract_call.function_name === "transfer"
     );
 
     if (transferTxs.length === 0) {
       return {
-        avgTransfer: '0',
-        largestTransfer: '0',
-        largestTransferDate: 'No transfers',
-        percentageChange: '0',
+        avgTransfer: "0",
+        largestTransfer: "0",
+        largestTransferDate: "No transfers",
+        percentageChange: "0",
       };
     }
 
+    // Extract sBTC amounts from function_args (first argument)
     const amounts = transferTxs.map((tx) => {
       const args = tx.tx.contract_call?.function_args;
       if (!args || args.length === 0) return 0;
 
-      const amountArg = args.find((arg) => arg.type === 'uint');
-      if (amountArg && amountArg.type === 'uint') {
-        const amountStr = amountArg.repr.startsWith('u')
+      // The amount is the first argument (u57249 in your example)
+      const amountArg = args[0];
+      if (amountArg.type === "uint") {
+        // Convert the repr string (e.g., "u57249") to number
+        const amountStr = amountArg.repr.startsWith("u")
           ? amountArg.repr.substring(1)
           : amountArg.repr;
-        return Number.parseFloat(amountStr) / 100000000; // Convert from satoshis to sBTC (8 decimal places)
+        return parseFloat(amountStr) / 100000000; // Convert from satoshis to sBTC (8 decimal places)
       }
       return 0;
     });
 
+    // Calculate average transfer
     const total = amounts.reduce((sum, amount) => sum + amount, 0);
     const avgTransfer = (total / amounts.length).toFixed(2);
 
     // Find largest transfer
     const maxAmount = Math.max(...amounts);
-    const maxIndex = amounts.indexOf(maxAmount);
-    const largestTx = maxIndex >= 0 ? transferTxs[maxIndex] : undefined;
-    const largestTransferDate = largestTx
-      ? new Date(largestTx.tx.block_time * 1000).toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric',
-        })
-      : 'Unknown date';
+    const largestTx = transferTxs[amounts.indexOf(maxAmount)];
+    const largestTransferDate = new Date(
+      largestTx.tx.block_time * 1000
+    ).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
 
+    // Calculate percentage change (comparing last 7 days vs previous 7 days)
     const now = Math.floor(Date.now() / 1000);
     const oneWeekAgo = now - 7 * 24 * 60 * 60;
     const twoWeeksAgo = now - 14 * 24 * 60 * 60;
 
     const recentWeekTxs = transferTxs.filter(
-      (tx) => tx.tx.block_time >= oneWeekAgo,
+      (tx) => tx.tx.block_time >= oneWeekAgo
     );
     const previousWeekTxs = transferTxs.filter(
-      (tx) => tx.tx.block_time >= twoWeeksAgo && tx.tx.block_time < oneWeekAgo,
+      (tx) => tx.tx.block_time >= twoWeeksAgo && tx.tx.block_time < oneWeekAgo
     );
 
     // Calculate amounts for recent and previous weeks
@@ -324,32 +329,43 @@ export async function calculateTransferStats(): Promise<{
         const args = tx.tx.contract_call?.function_args;
         if (!args || args.length === 0) return sum;
 
-        const amountArg = args.find((arg) => arg.type === 'uint');
-        if (amountArg && amountArg.type === 'uint') {
-          const amountStr = amountArg.repr.startsWith('u')
+        const amountArg = args[0];
+        if (amountArg.type === "uint") {
+          const amountStr = amountArg.repr.startsWith("u")
             ? amountArg.repr.substring(1)
             : amountArg.repr;
-          return sum + Number.parseFloat(amountStr) / 100000000;
+          return sum + parseFloat(amountStr) / 100000000;
         }
         return sum;
       }, 0);
     };
 
-    // Note: The remaining function code was truncated in your paste
-    // I'm adding a return statement to complete the function
+    const recentWeekTotal = getWeekAmount(recentWeekTxs);
+    const previousWeekTotal = getWeekAmount(previousWeekTxs);
+
+    let percentageChange = "0";
+    if (previousWeekTotal > 0) {
+      percentageChange = (
+        ((recentWeekTotal - previousWeekTotal) / previousWeekTotal) *
+        100
+      ).toFixed(1);
+    } else if (recentWeekTotal > 0) {
+      percentageChange = "100";
+    }
 
     return {
       avgTransfer,
-      largestTransfer: maxAmount.toFixed(2),
+      largestTransfer: maxAmount.toString(),
       largestTransferDate,
-      percentageChange: '0', // This would normally be calculated from the weeks comparison
+      percentageChange,
     };
   } catch (error) {
+    console.error("Error calculating transfer stats:", error);
     return {
-      avgTransfer: '0',
-      largestTransfer: '0',
-      largestTransferDate: 'Error occurred',
-      percentageChange: '0',
+      avgTransfer: "0",
+      largestTransfer: "0",
+      largestTransferDate: "Error",
+      percentageChange: "0",
     };
   }
 }

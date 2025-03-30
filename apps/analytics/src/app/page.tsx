@@ -1,7 +1,10 @@
 import getPriceHistory from '@/queries/price-history';
 import getSbtcData from '@/queries/sbtc';
 import getTopHolders from '@/queries/top-holders';
-import { fetchAndAnalyzeTransactions } from '@/queries/transactions';
+import {
+  calculateTransferStats,
+  fetchAndAnalyzeTransactions,
+} from '@/queries/transactions';
 import type { SbtcDataResponse } from '@/types/sbtc';
 import type { TopHoldersItem } from '@/types/top-holders';
 import { Button } from '@ui/components/ui/button';
@@ -43,6 +46,7 @@ export default async function DashboardPage() {
   const priceHistory = await getPriceHistory();
   const topHolders = await getTopHolders();
   const transactions = await fetchAndAnalyzeTransactions();
+  const transferStats = await calculateTransferStats();
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -152,22 +156,26 @@ export default async function DashboardPage() {
                           </CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <div className="text-2xl font-bold">0.42 sBTC</div>
+                          <div className="text-2xl font-bold">
+                            {transferStats.avgTransfer} sBTC
+                          </div>
                           <p className="text-xs text-muted-foreground">
-                            +20.1% from last month
+                            {transferStats.percentageChange}% from last month
                           </p>
                         </CardContent>
                       </Card>
                       <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                           <CardTitle className="text-sm font-medium">
-                            Largest Transfer
+                            Largest Transfer in the past 30 days
                           </CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <div className="text-2xl font-bold">24.5 sBTC</div>
+                          <div className="text-2xl font-bold">
+                            {transferStats.largestTransfer} sBTC
+                          </div>
                           <p className="text-xs text-muted-foreground">
-                            March 15, 2024
+                            {transferStats.largestTransferDate}
                           </p>
                         </CardContent>
                       </Card>
