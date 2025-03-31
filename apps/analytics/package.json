@@ -33,7 +33,7 @@
     "@testing-library/jest-dom": "6.4.8",
     "@testing-library/react": "16.0.1",
     "@vitejs/plugin-react": "4.3.4",
-    "@types/eslint": "^8",
+    "@types/eslint": "^9",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
