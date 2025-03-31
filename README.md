@@ -1,6 +1,8 @@
-# sBTC-Tools [Live Demo](https://sbtc-tools.vercel.app/) 
+# sBTC-Tools 
 
 A comprehensive suite of developer tools for working with sBTC on the Stacks blockchain. This monorepo contains multiple applications to help you interact with and analyze sBTC.
+[sBTC-Tools Live Demo](https://sbtc-tools.vercel.app/) 
+[sBTC-Analytics Live Demo](https://sbtc-analytics.vercel.app/) 
 
 ![sBTC Analytics Dashboard](https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-8RGr58qnZC5Hx5UNNRF5qsdUstnibU.png)
 
