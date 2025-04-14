@@ -15,7 +15,7 @@
     "@biomejs/biome": "1.8.3",
     "@repo/tsconfig": "workspace:*",
     "@types/node": "^20",
-    "@types/react": "^18",
+    "@types/react": "^19",
     "autoprefixer": "^10",
     "postcss": "^8",
     "postcss-load-config": "^6",
