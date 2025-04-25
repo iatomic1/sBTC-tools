@@ -14,7 +14,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
     "@repo/tsconfig": "workspace:*",
-    "@types/node": "^20",
+    "@types/node": "^22",
     "@types/react": "^18",
     "autoprefixer": "^10",
     "postcss": "^8",
